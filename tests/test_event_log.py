@@ -58,3 +58,13 @@ def test_empty_log_error_rate():
     log = EventLog([])
 
     assert log.error_rate == 0.0
+
+
+def test_filter_by_error_returns_only_errors():
+    events = load_events(LOG_FILE)
+    log = EventLog(events)
+
+    errors = log.filter_by_severity(EventSeverity.ERROR)
+
+    assert len(errors) == 6
+    assert all(event.severity == EventSeverity.ERROR for event in errors)
